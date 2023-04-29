@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 #dependencies
 /node_modules
+/dist
+/dist-ssr
+*.local
