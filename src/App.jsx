@@ -1,12 +1,32 @@
+import { useState, useEffect } from 'react';
 import Formulario from './components/Formulario';
 import Header from './components/Header';
 import ListadoPacientes from './components/ListadoPacientes';
-import { useState } from 'react';
 
 export default function App() {
 
   const [pacientes, setPacientes] = useState([]);
   const [paciente, setPaciente] = useState({});
+
+  useEffect(() => {
+    // LS = Local Storage
+    //const obtenerLS = () => {
+      const pacientesLS = JSON.parse(localStorage.getItem('pacientes')) ?? [];
+      pacientesLS?.length > 0 && setPacientes(pacientesLS);
+      //setPacientes(pacientesLS);
+    //}
+    //obtenerLS();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('pacientes', JSON.stringify(pacientes));
+  }, [pacientes]);
+
+  const eliminarPaciente = id => {
+    const pacientesActualizados = pacientes.filter(paciente => paciente.id !== id);
+
+    setPacientes(pacientesActualizados);
+  }
 
   return (
     <div className='container mx-auto mt-20'>
@@ -17,11 +37,13 @@ export default function App() {
           pacientes={pacientes}
           setPacientes={setPacientes}
           paciente={paciente}
+          setPaciente={setPaciente}
         />
         <ListadoPacientes
           pacientes={pacientes}
           setPaciente={setPaciente}
           paciente={paciente}
+          eliminarPaciente={eliminarPaciente}
         />
       </div>
     </div>
